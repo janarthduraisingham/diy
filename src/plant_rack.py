@@ -35,106 +35,83 @@ def cuboid(x, y, z, dx, dy, dz):
     ]
     return faces
 
-height = 2.25
-short = 0.0508
-fat = short*2
-length = 0.8
-depth = 0.50
+opacity=1
 
-top_shelf_height = 1.6
-middle_shelf_height = 1.3-fat
-bottom_shelf_height = 0.8-fat
+# 2x4 dimensions
+d1 = 2 * 0.0254
+d2 = 4 * 0.0254
 
-shelf_thickness = 0.02
+# Rack parameters
+rack_height = 1
+rack_width = 0.75
+spacing = 0.05
 
-screw_radius = 0.005
-screw_clearance = 0.2
+# Legs
+back_left_leg = cuboid(0, 0, 0, d2, -d1, rack_height)
+back_right_leg = cuboid(rack_width-d2, 0, 0, d2, -d1, rack_height)
 
-back_batten_1 = cuboid(0, depth, bottom_shelf_height, length, -short, fat)
-back_batten_2 = cuboid(0, depth, middle_shelf_height, length, -short, fat)
-back_batten_3 = cuboid(0, depth, top_shelf_height, length, -short, fat)
+middle_left_leg = cuboid(0, -0.5, 0, d2, -d1, rack_height)
+middle_right_leg = cuboid(rack_width-d2, -0.5, 0, d2, -d1, rack_height)
 
-left_batten_1 = cuboid(0, 0, bottom_shelf_height, short, depth-short, fat)
-left_batten_2 = cuboid(0, 0, middle_shelf_height, short, depth-short, fat)
-left_batten_3 = cuboid(0, 0, top_shelf_height, short, depth-short, fat)
+front_left_leg = cuboid(0, -1, 0, d2, -d1, rack_height/2)
+front_right_leg = cuboid(rack_width-d2, -1, 0, d2, -d1, rack_height/2)
 
-right_batten_1 = cuboid(length-short, 0, bottom_shelf_height, short, depth-short, fat)
-right_batten_2 = cuboid(length-short, 0, middle_shelf_height, short, depth-short, fat)
-right_batten_3 = cuboid(length-short, 0, top_shelf_height, short, depth-short, fat)
+# Crossbars
+front_crossbar_1 = cuboid(0, -1-d1, rack_height/2,
+                        rack_width, d2, d1)
+front_crossbar_2 = cuboid(0, -1-d1 + (d2+spacing), rack_height/2,
+                        rack_width, d2, d1)
+front_crossbar_3 = cuboid(0, -1-d1 + 2*(d2+spacing), rack_height/2,
+                        rack_width, d2, d1)
+back_crossbar_1 = cuboid(0, -0.5-d1, rack_height,
+                        rack_width, d2, d1)
+back_crossbar_2 = cuboid(0, -0.5-d1 + 1*(spacing+d2), rack_height,
+                        rack_width, d2, d1)
+back_crossbar_3 = cuboid(0, -0.5-d1 + 2*(spacing+d2), rack_height,
+                        rack_width, d2, d1)
 
-shelf_1 = cuboid(0, 0, bottom_shelf_height+fat, length, depth, shelf_thickness)
-shelf_2 = cuboid(0, 0, middle_shelf_height+fat, length, depth, shelf_thickness)
-shelf_3 = cuboid(0, 0, top_shelf_height+fat, length, depth, shelf_thickness)
+# Longitudinal bars
+lower_left_long_bar = cuboid(d2, 0, rack_height/2 - d2,
+                             d1, -1-d1, d2)
+lower_right_long_bar = cuboid(rack_width - d2 - d1, 0, rack_height/2 - d2,
+                             d1, -1-d1, d2)
 
-back_batten_1_screw_1 = cuboid(screw_clearance-screw_radius, depth-short, bottom_shelf_height+0.5*fat-screw_radius, screw_radius, short+0.1, screw_radius)
-back_batten_1_screw_2 = cuboid(length-screw_clearance-screw_radius, depth-short, bottom_shelf_height+0.5*fat-screw_radius, screw_radius, short+0.1, screw_radius)
+upper_left_long_bar = cuboid(d2, 0, rack_height - d2,
+                             d1, -0.5-d1, d2)
+upper_right_long_bar = cuboid(rack_width - d2 - d1, 0, rack_height - d2,
+                             d1, -0.5-d1, d2)
+
+# Walls
+
+back_wall = cuboid(0, 0, 0, rack_width, 0.01, rack_height)
+left_wall = cuboid(0-0.01, 0, 0, 0.01, -0.5, rack_height)
+right_wall = cuboid(rack_width, 0, 0, 0.01, -0.5, rack_height)
+
+# Legs
+ax.add_collection3d(Poly3DCollection(back_left_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(back_right_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(middle_left_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(middle_right_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(front_left_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(front_right_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
+
+# Crossbars
+ax.add_collection3d(Poly3DCollection(front_crossbar_1, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(front_crossbar_2, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(front_crossbar_3, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(back_crossbar_1, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(back_crossbar_2, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(back_crossbar_3, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+
+# Longitudinal bars
+ax.add_collection3d(Poly3DCollection(lower_left_long_bar, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(lower_right_long_bar, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+
+ax.add_collection3d(Poly3DCollection(upper_left_long_bar, facecolors='lightgreen', edgecolors='black', alpha=opacity))
+ax.add_collection3d(Poly3DCollection(upper_right_long_bar, facecolors='lightgreen', edgecolors='black', alpha=opacity))
 
 
-back_batten_2_screw_1 = cuboid(screw_clearance-screw_radius, depth-short, middle_shelf_height+0.5*fat-screw_radius, screw_radius, short+0.1, screw_radius)
-back_batten_2_screw_2 = cuboid(length-screw_clearance-screw_radius, depth-short, middle_shelf_height+0.5*fat-screw_radius, screw_radius, short+0.1, screw_radius)
-
-back_batten_3_screw_1 = cuboid(screw_clearance-screw_radius, depth-short, top_shelf_height+0.5*fat-screw_radius, screw_radius, short+0.1, screw_radius)
-back_batten_3_screw_2 = cuboid(length-screw_clearance-screw_radius, depth-short, top_shelf_height+0.5*fat-screw_radius, screw_radius, short+0.1, screw_radius)
-
-left_batten_1_screw_1 = cuboid(-0.1, screw_clearance-screw_radius, bottom_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-left_batten_1_screw_2 = cuboid(-0.1, depth-screw_clearance-screw_radius, bottom_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-
-left_batten_2_screw_1 = cuboid(-0.1, screw_clearance-screw_radius, middle_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-left_batten_2_screw_2 = cuboid(-0.1, depth-screw_clearance-screw_radius, middle_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-
-left_batten_3_screw_1 = cuboid(-0.1, screw_clearance-screw_radius, top_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-left_batten_3_screw_2 = cuboid(-0.1, depth-screw_clearance-screw_radius, top_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-
-right_batten_1_screw_1 = cuboid(length-short, screw_clearance-screw_radius, bottom_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-right_batten_1_screw_2 = cuboid(length-short, depth-screw_clearance-screw_radius, bottom_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-
-right_batten_2_screw_1 = cuboid(length-short, screw_clearance-screw_radius, middle_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-right_batten_2_screw_2 = cuboid(length-short, depth-screw_clearance-screw_radius, middle_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-
-right_batten_3_screw_1 = cuboid(length-short, screw_clearance-screw_radius, top_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-right_batten_3_screw_2 = cuboid(length-short, depth-screw_clearance-screw_radius, top_shelf_height+0.5*fat-screw_radius, 0.1+short, screw_radius, screw_radius)
-
-back_wall = cuboid(0, depth, 0, length, 0.01, height)
-left_wall = cuboid(0-0.01, 0, 0, 0.01, depth, height)
-right_wall = cuboid(length, 0, 0, 0.01, depth, height)
-
-ax.add_collection3d(Poly3DCollection(back_batten_1, facecolors='lightblue', edgecolors='black', alpha=0.7))
-ax.add_collection3d(Poly3DCollection(back_batten_2, facecolors='lightblue', edgecolors='black', alpha=0.7))
-ax.add_collection3d(Poly3DCollection(back_batten_3, facecolors='lightblue', edgecolors='black', alpha=0.7))
-
-ax.add_collection3d(Poly3DCollection(left_batten_1, facecolors='lightblue', edgecolors='black', alpha=0.7))
-ax.add_collection3d(Poly3DCollection(left_batten_2, facecolors='lightblue', edgecolors='black', alpha=0.7))
-ax.add_collection3d(Poly3DCollection(left_batten_3, facecolors='lightblue', edgecolors='black', alpha=0.7))
-
-ax.add_collection3d(Poly3DCollection(right_batten_1, facecolors='lightblue', edgecolors='black', alpha=0.7))
-ax.add_collection3d(Poly3DCollection(right_batten_2, facecolors='lightblue', edgecolors='black', alpha=0.7))
-ax.add_collection3d(Poly3DCollection(right_batten_3, facecolors='lightblue', edgecolors='black', alpha=0.7))
-
-ax.add_collection3d(Poly3DCollection(shelf_1, facecolors='brown', edgecolors='black', alpha=0.1))
-ax.add_collection3d(Poly3DCollection(shelf_2, facecolors='brown', edgecolors='black', alpha=0.1))
-ax.add_collection3d(Poly3DCollection(shelf_3, facecolors='brown', edgecolors='black', alpha=0.1))
-
-ax.add_collection3d(Poly3DCollection(back_batten_1_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(back_batten_1_screw_2, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(back_batten_2_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(back_batten_2_screw_2, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(back_batten_3_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(back_batten_3_screw_2, facecolors='black', edgecolors='black', alpha=1))
-
-ax.add_collection3d(Poly3DCollection(left_batten_1_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(left_batten_1_screw_2, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(left_batten_2_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(left_batten_2_screw_2, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(left_batten_3_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(left_batten_3_screw_2, facecolors='black', edgecolors='black', alpha=1))
-
-ax.add_collection3d(Poly3DCollection(right_batten_1_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(right_batten_1_screw_2, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(right_batten_2_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(right_batten_2_screw_2, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(right_batten_3_screw_1, facecolors='black', edgecolors='black', alpha=1))
-ax.add_collection3d(Poly3DCollection(right_batten_3_screw_2, facecolors='black', edgecolors='black', alpha=1))
-
+# Walls
 ax.add_collection3d(Poly3DCollection(back_wall, facecolors='yellow', edgecolors='yellow', alpha=0.1))
 ax.add_collection3d(Poly3DCollection(left_wall, facecolors='yellow', edgecolors='yellow', alpha=0.1))
 ax.add_collection3d(Poly3DCollection(right_wall, facecolors='yellow', edgecolors='yellow', alpha=0.1))
