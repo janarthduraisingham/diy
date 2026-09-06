@@ -43,7 +43,7 @@ d2 = 4 * 0.0254
 
 # Rack parameters
 rack_height = 1
-rack_width = 0.75
+rack_width = 0.60
 spacing = 0.05
 
 # Legs
@@ -84,8 +84,8 @@ upper_right_long_bar = cuboid(rack_width - d2 - d1, 0, rack_height - d2,
 # Walls
 
 back_wall = cuboid(0, 0, 0, rack_width, 0.01, rack_height)
-left_wall = cuboid(0-0.01, 0, 0, 0.01, -0.5, rack_height)
-right_wall = cuboid(rack_width, 0, 0, 0.01, -0.5, rack_height)
+left_wall = cuboid(0-0.01, 0, 0, 0.01, -0.49, rack_height)
+right_wall = cuboid(rack_width, 0, 0, 0.01, -0.49, rack_height)
 
 # Legs
 ax.add_collection3d(Poly3DCollection(back_left_leg, facecolors='lightblue', edgecolors='black', alpha=opacity))
